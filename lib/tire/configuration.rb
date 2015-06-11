@@ -2,8 +2,17 @@ module Tire
 
   class Configuration
 
+    # Accept an array of servers instead of a single string
     def self.url(value=nil)
-      @url = (value ? value.to_s.gsub(%r|/*$|, '') : nil) || @url || ENV['ELASTICSEARCH_URL'] || "http://localhost:9200"
+      if value.nil?
+        @url = @url || ENV['ELASTICSEARCH_URL'] || "http://localhost:9200"
+      elsif value.is_a?(String)
+        @url = value.to_s.gsub(%r|/*$|, '')
+      elsif value.is_a?(Array)
+        @url = value.sample.to_s.gsub(%r|/*$|, '')
+      else
+        raise "Unknown URL format"
+      end
     end
 
     def self.client(klass=nil)
