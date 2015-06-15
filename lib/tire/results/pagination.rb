@@ -6,7 +6,7 @@ module Tire
     module Pagination
 
       def default_per_page
-        10
+        1000
       end
       module_function :default_per_page
 
